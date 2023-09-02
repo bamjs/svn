@@ -34,7 +34,7 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/docs/",
+              "baseHref": "/svn/",
               "budgets": [
                 {
                   "type": "initial",
