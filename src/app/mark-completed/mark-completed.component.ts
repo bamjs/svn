@@ -35,6 +35,9 @@ updateForm(invitationevent){
 this.invitation.completed = invitationevent.completed;
 this.invitation.count = invitationevent.count;
 }
+closeModal(){
+  this.activeModal.close();
+}
 updateLocation(){
     // this.mapsURL = `https://maps.google.com/maps?q=${this.positionMap.street}%20${this.positionMap.num}%20%${this.positionMap.city}`;
     if(navigator){

@@ -102,11 +102,9 @@ export class InvitationsComponent implements OnInit {
     const modalRef: NgbModalRef = this.ngbModalService.open(MarkCompletedComponent, { size: 'lg', backdrop: 'static' })
     modalRef.componentInstance.invitation = invitation
     modalRef.result.then(invitation => {
-      console.log(invitation);
-      // invitation.completed = true
-      let data = this.invitationService.update(invitation)
-      console.log(data);
-
+      if(invitation){
+        let data = this.invitationService.update(invitation)
+      }
     })
   }
   updatePageSize(event: Event) {
