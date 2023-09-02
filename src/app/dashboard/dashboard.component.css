@@ -1,0 +1,11 @@
+.dashboard{
+    /* display: flexbox; */
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+    /* min-height: 80vh; */
+    /* flex-grow: 1; */
+}
+.chart{
+    height:16rem;
+}

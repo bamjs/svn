@@ -1,0 +1,48 @@
+<div class="createInvitationForm">
+  <div *ngIf="data.length>0"> Preview Of Excel Records</div>
+  <app-invitations [tempData]="data" *ngIf="data.length>0"></app-invitations>
+  <form [formGroup]="invitationForm" *ngIf="data.length<=0" class="form flex">
+    <div class="row mb-3">
+      <label for="fname" class="col-sm-2 col-form-label">Name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" [ngbTypeahead]="fnameSearch" id="fname" formControlName="fname">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="mobile" class="col-sm-2 col-form-label">Mobile</label>
+      <div class="col-sm-10">
+        <input class="form-control" [ngbTypeahead]="mobileSearch" id="mobile" formControlName="mobile">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="place" class="col-sm-2 col-form-label">Place</label>
+      <div class="col-sm-10">
+        <input type="text" [ngbTypeahead]="placeSearch" class="form-control" id="place" formControlName="place">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="count" class="col-sm-2 col-form-label">Count</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="count" formControlName="count">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-10 offset-sm-2">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="completed" formControlName="completed">
+          <label class="form-check-label" for="completed">
+            Is completed
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center" *ngIf="!editMode">
+      <label for="bulkUpload" class="col-form-label">Choose Excel For Bulk Upload</label>
+      <input type="file" id="bulkUpload" class="float-end col-mb-11 col-sm-5 btn  btn-secondary" outerText="Bulk upload"
+        title="bulk upload" (change)="readContentOfexcel($event)">
+      <div class="col-1"></div>
+      <button type="submit" [disabled]="!invitationForm.valid" class="btn btn-primary col-mb-12 col-sm-6"
+        *ngIf="!editMode" (click)="createInvitation()">Create</button>
+    </div>
+  </form>
+</div>

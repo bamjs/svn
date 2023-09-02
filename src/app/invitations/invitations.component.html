@@ -1,0 +1,70 @@
+<div class="invitations">
+  <div class="invitationForm" *ngIf="tempData.length==0">
+    <form [formGroup]="searchInvitationForm" class="form ">
+      <div class="row mb-3">
+        <label for="fname" class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" [ngbTypeahead]="fnameSearch" id="fname" formControlName="fname">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="mobile" class="col-sm-2 col-form-label">Mobile</label>
+        <div class="col-sm-10">
+          <input class="form-control" [ngbTypeahead]="mobileSearch" id="mobile" formControlName="mobile">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="place" class="col-sm-2 col-form-label">Place</label>
+        <div class="col-sm-10">
+          <input type="text" [ngbTypeahead]="placeSearch" class="form-control" id="place" formControlName="place">
+        </div>
+      </div>
+      <div>
+        <div class="row justify-content-center">
+          <button type="submit" class="btn btn-primary" (click)="searchInvitation()">Search</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="records">
+    <div class="table-responsive-sm">
+      <table class="table flex">
+        <thead class="thead-dark">
+          <tr class="thead-dark">
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Place</th>
+            <th scope="col">Mobile</th>
+            <th scope="col">count</th>
+            <th scope="col">Completed</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let invitation of invitations;let i= index">
+          <tr [ngClass]="{'table-success':invitation.completed==true}">
+            <td>{{((page-1)*pageSize)+(i+1)}}</td>
+            <td>{{invitation.fname}}</td>
+            <td>{{invitation.place}}</td>
+            <td>{{invitation.mobile}}</td>
+            <td>{{invitation.count}}</td>
+            <td><input title="iscompleted" type="checkbox" disabled [checked]="invitation.completed"
+                textContent="Completed"></td>
+            <td><button type="button" (click)="openModal(invitation)" class="btn btn-primary">Mark As Completed</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row justify-content-center">
+      <ngb-pagination [(page)]="page" class="col-6" (pageChange)="updateRecords()" *ngIf="tempData.length<=0"
+        [collectionSize]="collectionSize" [ellipses]="true" [pageSize]="pageSize">
+      </ngb-pagination>
+      <button *ngIf="tempData==null||tempData.length>0" class="btn btn-primary float-end col-3"
+        (click)="bulkInsert()">Upload</button>
+      <div class="col-2 col-sm-2">
+        <select (change)="updatePageSize($event)" class="form-select" aria-label="Default select example">
+          <option value="{{page}}" *ngFor="let page of pageSizes">{{page}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

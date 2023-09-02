@@ -1,0 +1,16 @@
+.invitations{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2em;
+}
+.invitationForm{
+
+}
+.records{
+}
+@media screen and (max-width: 500px) {
+    .invitations {
+      display: block;
+      flex-direction: column;
+    }
+  }
