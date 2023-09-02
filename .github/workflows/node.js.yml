@@ -33,4 +33,4 @@ jobs:
       with:
         branch: gh-pages
         folder: ./docs
-        github_token: ${{ secrets.PA_TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
