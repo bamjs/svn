@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [ 18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -27,10 +27,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: build And Deploy
-      working-directory: ./svn
-      run: npm install && npm run build && cp dist/svn/*  
+      run:  npm install && npm run build && cp ./docs/* .  
     - name: deploy
-      uses: JamesIves/github-pages-deploy-acttion@4.1.1
+      uses: JamesIves/github-pages-deploy-action@4.1.1
       with:
         branch: gh-pages
-        folder: svn/dist/svn
+        folder: ./docs
+        github_token: ${{ secrets.GITHUB_TOKEN }}
