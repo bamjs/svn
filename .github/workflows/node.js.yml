@@ -27,9 +27,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: build And Deploy
-      run: ls -l && npm install && npm run build && cp docs/*  
+      run:  npm install && npm run build && cp ./docs/index.html .  
     - name: deploy
       uses: JamesIves/github-pages-deploy-action@4.1.1
       with:
         branch: gh-pages
-        folder: ./docs
+        folder: /docs
