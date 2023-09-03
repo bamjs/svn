@@ -9,3 +9,8 @@
  background-color: rgba(154, 188, 216, 0.8);
  z-index: 99999;
 }
+.app{
+   background-repeat: no-repeat;
+   background-size: 100%;
+    height: 100%;
+}
