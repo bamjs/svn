@@ -11,9 +11,7 @@ export class MongoDbService {
   private CLUSTER_NAME:string ='svn-invite'
   private DATABASE_NAME:string ='svn'
   private COLLECTION_NAME:string ='invite'
-  private API_KEY: string ='LXjacAFtH2FVFgZHkd9ayUtYSzXnWO7rMwi0rdFqEprJfguQdEEu0L7Rih64dU4g'
-  private BASE_URL:string ='https://ap-south-1.aws.data.mongodb-api.com/app/data-varws/endpoint/data/v1'
-  constructor(private http:HttpClient,private jwt:JwtService) { }
+ constructor(private http:HttpClient,private jwt:JwtService) { }
   async insertOne(collectionName:string,document:{},database:string = this.DATABASE_NAME){
     const colClient = await this.getMongoClientWithCollection(database,collectionName);
     colClient.insertOne(document)

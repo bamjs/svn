@@ -27,7 +27,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: build And Deploy
-      run:  npm install && npm run build && cp ./docs/* .
+      env:
+        APP_SECRET: ${{ secrets.APP_SECRET }}
+      run:  npm install && npm run build && cp -r ./docs/* .
     - name: deploy
       uses: JamesIves/github-pages-deploy-action@4.1.1
       with:

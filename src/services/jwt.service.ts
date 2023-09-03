@@ -5,7 +5,7 @@ import * as uuid from 'uuid'
   providedIn: 'root'
 })
 export class JwtService {
-SECRET:string = 'srikanthwebsneelimainvitationcomplete'
+SECRET:string = process.env['APP_SECRET']
 uuidout:string='8885469415'
   constructor() { }
 async generateToken():Promise<string>{
