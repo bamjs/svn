@@ -37,6 +37,11 @@
             <th scope="col">Mobile</th>
             <th scope="col">count</th>
             <th scope="col">Completed</th>
+            <th scope="col">
+              <select (change)="updatePageSize($event)" class="form-select" aria-label="Default select example">
+                <option value="{{page}}" *ngFor="let page of pageSizes">{{page}}</option>
+              </select>
+            </th>
           </tr>
         </thead>
         <tbody *ngFor="let invitation of invitations;let i= index">
@@ -60,11 +65,11 @@
       </ngb-pagination>
       <button *ngIf="tempData==null||tempData.length>0" class="btn btn-primary float-end col-3"
         (click)="bulkInsert()">Upload</button>
-      <div class="col-2 col-sm-2">
+      <!-- <div class="col-2 col-sm-2">
         <select (change)="updatePageSize($event)" class="form-select" aria-label="Default select example">
           <option value="{{page}}" *ngFor="let page of pageSizes">{{page}}</option>
         </select>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
