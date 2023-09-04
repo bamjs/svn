@@ -1,19 +1,29 @@
 <div class="container">
     <div class="row">
-        <div class="chart col">
-            <canvas id="groupBycity">{{groupByCity}}</canvas>
+        <span class="col-10 col-sm-12 col-xs-12">
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" [style.width]="getPercentage()+'%'" [attr.aria-valuenow]="invitationsCompleted" aria-valuemin="0" [attr.aria-valuemax]="totalInvitations">{{getPercentage()+'%'}}</div>
+          </div>
+        </span>
+    </div>
+    <div class="row">
+        <div class="chart   col-sm-5 card">
+            <img [src]="photo" class="images" alt="images">
+            <!-- <div [ngStyle]="{'background-image': 'linear-gradient(rgba(141, 141, 237, 0.5), rgba(168, 212, 144, 0.5)),url(' + photo + ')'}"></div> -->
+            <!-- <canvas id="groupBycityandCompleted">{{groupBycityandCompleted}}</canvas> -->
         </div>
-        <div class="chart col">
+
+        <div class="chart   col-sm-5 card text-white bg-white">
             <canvas id="groupBycompleted">{{groupBycompleted}}</canvas>
         </div>
     </div>
     <div class="row">
-        <div class="chart col">
+        <div class="chart  card col-sm-5 text-white bg-white">
             <canvas id="groupByCityPeopleCount">{{groupByCityPeopleCount}}</canvas>
 
         </div>
-        <div class="chart col">
-            <!-- <canvas id="groupBycityandCompleted">{{groupBycityandCompleted}}</canvas> -->
+        <div class="chart  card  col-sm-5 text-white bg-white">
+            <canvas id="groupBycity">{{groupByCity}}</canvas>
         </div>
     </div>
 

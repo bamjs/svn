@@ -14,3 +14,10 @@
       flex-direction: column;
     }
   }
+.card{
+  padding:5px;
+}
+.form{
+  padding:5px;
+  margin: 2px;
+}

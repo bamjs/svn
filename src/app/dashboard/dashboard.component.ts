@@ -20,8 +20,23 @@ export class DashboardComponent implements OnInit {
   preparedGroupByCity;
   preparedGroupByCompleted;
   preparedGroupByCityPeopleCount;
-  ngOnInit(): void {
+  invitationsCompleted;
+  totalInvitations;
 
+  // photo
+  photo = '../assets/group_new.jpg';
+  photos=['../assets/group_new.jpg','../assets/child.jpg']
+  // loader$
+  index = 0
+  ngOnInit(): void {
+     setInterval(()=>{
+        if (this.index < this.photos.length) {
+          this.photo = this.photos[this.index++]
+        }else{
+          this.index =0
+        }
+
+      },2000)
     let groupByCityAndCompleted = [
       {
         "_id": {
@@ -88,7 +103,7 @@ export class DashboardComponent implements OnInit {
         this.preparedGroupByCityPeopleCount = this.prepareGroupByData(data)
         // console.log(this.preparedGroupByCityPeopleCount);
 
-        this.groupByCityPeopleCount = this.prepareGroupChart('groupByCityPeopleCount',this.preparedGroupByCityPeopleCount,`Count People By City [Total:${this.preparedGroupByCityPeopleCount['totalCount']}]`)
+        this.groupByCityPeopleCount = this.prepareGroupChart('groupByCityPeopleCount',this.preparedGroupByCityPeopleCount,`Count of People By City [Total:${this.preparedGroupByCityPeopleCount['totalCount']}]`)
         this.commonService.loaderHide()
       }
     )
@@ -145,6 +160,8 @@ export class DashboardComponent implements OnInit {
   }
   prepareDoughnutChart(id, preparedGroupedData, label) {
     // let delayed = preparedGroupedData.delayed
+    this.totalInvitations = preparedGroupedData.totalCount;
+
     return new Chart(id, {
       type: 'doughnut',
       data: {
@@ -231,9 +248,13 @@ export class DashboardComponent implements OnInit {
     let colors = []
     let borderColors = []
     let totalCount=0
+    // this.invitationsCompleted =
     for (const element of groupedData) {
       console.log(element['_id']);
-
+      if (element['_id']) {
+        this.invitationsCompleted = element['invitationCount']
+      }
+      // this.invitationsCompleted = element['_id']?element['invitationCount']:
       labels.push(element['_id']?`Completed ${element['invitationCount']}`:`Not Completed ${element['invitationCount']}`)
       data.push(element['invitationCount'])
       colors.push(element['_id']?'red':'green')
@@ -274,6 +295,9 @@ export class DashboardComponent implements OnInit {
     let dt =[trueDataset,falseDataset]
     console.log(dt);
     // return {"labels":,"dataset":dt};
+  }
+  getPercentage(){
+    return Math.round(this.invitationsCompleted/this.totalInvitations*100);
   }
 
 

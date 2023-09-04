@@ -1,6 +1,6 @@
 <div class="invitations">
-  <div class="invitationForm" *ngIf="tempData.length==0">
-    <form [formGroup]="searchInvitationForm" class="form ">
+  <div class="invitationForm " *ngIf="tempData.length==0">
+    <form [formGroup]="searchInvitationForm"  class="form border">
       <div class="row mb-3">
         <label for="fname" class="col-sm-2 col-form-label">Name</label>
         <div class="col-sm-10">
@@ -21,12 +21,14 @@
       </div>
       <div>
         <div class="row justify-content-center">
+          <div class="col">
           <button type="submit" class="btn btn-primary" (click)="searchInvitation()">Search</button>
+        </div>
         </div>
       </div>
     </form>
   </div>
-  <div class="records">
+  <div class="records card">
     <div class="table-responsive-sm">
       <table class="table flex">
         <thead class="thead-dark">

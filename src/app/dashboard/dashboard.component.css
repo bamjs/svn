@@ -8,4 +8,9 @@
 }
 .chart{
     height:16rem;
+    margin:2px;
+}
+.images{
+    height: inherit;
+    width: 100%;
 }
