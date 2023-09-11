@@ -2,7 +2,8 @@ import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CommonService } from 'src/services/common.service';
 import { Invitation, InvitationService } from 'src/services/invitation.service';
-import * as XLSX from 'xlsx'
+import * as XLSX from 'xlsx';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, OperatorFunction, catchError, debounceTime, distinctUntilChanged, from, map, of, pluck, switchMap, tap } from 'rxjs';
 
@@ -16,29 +17,37 @@ export class CreateInviteComponent implements AfterViewInit {
   @Output('inviteFormUpdate')
   inviteFormEvent= new EventEmitter();
   searching: boolean;
+  isContactInput:boolean;
+  public contactCity : string;
   searchFailed: boolean;
   contacts:[]
   constructor(private formBuilder: FormBuilder,
     private commonService: CommonService,
+    private ngbModalService: NgbModal,
     private inviteService: InvitationService) {
-
+      this.isContactInput = false;
   }
   mobileSearch:OperatorFunction<string, readonly string[]> =(text$:Observable<string>)=>this.search(text$,'mobile')
   fnameSearch:OperatorFunction<string, readonly string[]> =(text$:Observable<string>)=>this.search(text$,'fname')
   placeSearch:OperatorFunction<string, readonly string[]> =(text$:Observable<string>)=>this.search(text$,'place')
 
  async getContacts(){
-    const supported = ('contacts' in navigator && 'ContactsManager' in window);
+
+    let supported = ('contacts' in navigator && 'ContactsManager' in window);
     console.log(supported);
-    
-    const props = ['name', 'email', 'tel', 'address', 'icon'];
-const opts = {multiple: true};
-try {
-  const contacts = await (navigator as any).contacts.select(props, opts);
-  this.handleResults(contacts);
-} catch (ex) {
-  // Handle any errors here.
-}
+    supported = true;
+    console.log(supported);
+    if (supported) {
+      this.isContactInput = true
+      const props = ['name', 'tel', 'address'];
+      const opts = {multiple: true};
+      try {
+        const contacts = await (navigator as any).contacts.select(props, opts);
+        this.handleResults(contacts);
+      } catch (ex) {
+        // Handle any errors here.
+      }
+    }
   }
 
    search =(text$:Observable<string>,column)=> text$.pipe(
@@ -133,6 +142,19 @@ try {
    handleResults(contacts: any) {
     console.log(contacts);
   this.contacts = contacts;
+  let contact ={
+    fname: '',
+    mobile: null,
+    count: 1,
+    date: new Date(),
+    completed: false,
+    place: ''
+  }
+  this.contacts.forEach((elem:{})=>{
+    contact.place = this.contactCity
+    contact.mobile = elem['tel'][0]
+    contact.fname =elem['name']
+  })
 
   }
 }

@@ -1,4 +1,4 @@
-<div class="createInvitationForm">
+<div class="createInvitationForm" *ngIf="!isContactInput">
   <div *ngIf="data.length>0"> Preview Of Excel Records</div>
   <app-invitations [tempData]="data" *ngIf="data.length>0"></app-invitations>
   <form [formGroup]="invitationForm" *ngIf="data.length<=0" class="form flex">
@@ -36,9 +36,6 @@
         </div>
       </div>
     </div>
-    <div *ngFor="let contact of contacts">
-{{contact |json}}
-    </div>
     <div class="row justify-content-center" *ngIf="!editMode">
       <label for="bulkUpload" class="col-form-label">Choose Excel For Bulk Upload</label>
       <input type="file" id="bulkUpload" class="float-end col-mb-11 col-sm-5 btn  btn-secondary" outerText="Bulk upload"
@@ -52,3 +49,12 @@
     </div>
   </form>
 </div>
+<div class="container">
+<label for="contactInput" class="col-form-label" *ngIf="isContactInput">Enter the City of Contacts</label>
+<span class="row">
+<input type="text" id="contactInput" title="Contacts State" [(ngModel)]="contactCity" class="col btn btn-light" placeholder="Anantapur"  *ngIf="isContactInput"/>
+</span>
+</div>
+<div *ngFor="let contact of contacts">
+  {{contact |json}}
+      </div>
