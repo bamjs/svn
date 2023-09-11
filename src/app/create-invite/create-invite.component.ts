@@ -17,6 +17,7 @@ export class CreateInviteComponent implements AfterViewInit {
   inviteFormEvent= new EventEmitter();
   searching: boolean;
   searchFailed: boolean;
+  contacts:[]
   constructor(private formBuilder: FormBuilder,
     private commonService: CommonService,
     private inviteService: InvitationService) {
@@ -26,10 +27,22 @@ export class CreateInviteComponent implements AfterViewInit {
   fnameSearch:OperatorFunction<string, readonly string[]> =(text$:Observable<string>)=>this.search(text$,'fname')
   placeSearch:OperatorFunction<string, readonly string[]> =(text$:Observable<string>)=>this.search(text$,'place')
 
-
+ async getContacts(){
+    const supported = ('contacts' in navigator && 'ContactsManager' in window);
+    console.log(supported);
+    
+    const props = ['name', 'email', 'tel', 'address', 'icon'];
+const opts = {multiple: true};
+try {
+  const contacts = await (navigator as any).contacts.select(props, opts);
+  this.handleResults(contacts);
+} catch (ex) {
+  // Handle any errors here.
+}
+  }
 
    search =(text$:Observable<string>,column)=> text$.pipe(
-    debounceTime(500),
+    debounceTime(200),
     distinctUntilChanged(),
     tap(() => (this.searching = true)),
     switchMap((term) =>
@@ -46,6 +59,7 @@ export class CreateInviteComponent implements AfterViewInit {
   );
 
   ngAfterViewInit(): void {
+    // this.getContacts();
     if (this.editMode) {
       this.invitationForm.get("fname")?.disable()
       this.invitationForm.get("mobile")?.disable()
@@ -114,6 +128,11 @@ export class CreateInviteComponent implements AfterViewInit {
     };
     reader.readAsBinaryString(target.files[0]);
     reader.DONE
+
+  }
+   handleResults(contacts: any) {
+    console.log(contacts);
+  this.contacts = contacts;
 
   }
 }

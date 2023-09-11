@@ -1,6 +1,6 @@
 .createInvitationForm{
     margin: 2em;
 }
-#bulkUpload{
+#bulkUpload, #bulkUploadTemplate,button{
 margin-bottom: .5em;
 }

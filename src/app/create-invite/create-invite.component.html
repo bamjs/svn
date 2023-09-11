@@ -36,10 +36,16 @@
         </div>
       </div>
     </div>
+    <div *ngFor="let contact of contacts">
+{{contact}}
+    </div>
     <div class="row justify-content-center" *ngIf="!editMode">
       <label for="bulkUpload" class="col-form-label">Choose Excel For Bulk Upload</label>
       <input type="file" id="bulkUpload" class="float-end col-mb-11 col-sm-5 btn  btn-secondary" outerText="Bulk upload"
         title="bulk upload" (change)="readContentOfexcel($event)">
+      <a href="../../assets/invites.xlsx" id="bulkUploadTemplate" class="float-end  col-mb-11 col-sm-5 btn  btn-secondary" outerText="Bulk upload"
+        title="bulk upload" download="invite-template.xlsx">Download Template </a>
+        <button class="float-end col-mb-11 col-sm-5 btn  btn-secondary" type="button" (click)="getContacts()"> Open Contacts </button>
       <div class="col-1"></div>
       <button type="submit" [disabled]="!invitationForm.valid" class="btn btn-primary col-mb-12 col-sm-6"
         *ngIf="!editMode" (click)="createInvitation()">Create</button>
