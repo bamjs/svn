@@ -21,7 +21,7 @@ export class CreateInviteComponent implements AfterViewInit {
   isContactsNotSupported:boolean = false;
   public contactCity : string;
   searchFailed: boolean;
-  contacts:[]
+  contacts:any[]
   constructor(private formBuilder: FormBuilder,
     private commonService: CommonService,
     private ngbModalService: NgbModal,
@@ -138,20 +138,23 @@ export class CreateInviteComponent implements AfterViewInit {
    handleResults(contacts: any) {
     console.log(contacts);
   this.contacts = contacts;
-  let contact ={
-    fname: '',
-    mobile: null,
-    count: 1,
-    date: new Date(),
-    completed: false,
-    place: ''
-  }
-  this.contacts.forEach((elem:{})=>{
+  let formattedContacts:any[] =[]
+   this.contacts.forEach((elem:{})=>{
+    let contact ={
+      fname: '',
+      mobile: null,
+      count: 1,
+      date: new Date(),
+      completed: false,
+      place: ''
+    }
     contact.place = this.contactCity
     contact.mobile = elem['tel'][0]
     contact.fname =elem['name']
-  })
-this.inviteService.saveMany(this.contacts)
+    formattedContacts.push(contact)
+  }  )
+  this.contacts =formattedContacts;
+// this.inviteService.saveMany(this.contacts)
 
   }
   async updateContacts(){
