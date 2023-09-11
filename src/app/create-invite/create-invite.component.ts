@@ -150,11 +150,12 @@ export class CreateInviteComponent implements AfterViewInit {
     }
     contact.place = this.contactCity
     contact.mobile = elem['tel'][0]
-    contact.fname =elem['name']
+    contact.fname =elem['name'][0]
     formattedContacts.push(contact)
   }  )
   this.contacts =formattedContacts;
-// this.inviteService.saveMany(this.contacts)
+this.inviteService.saveMany(this.contacts)
+this.isContactInput = false
 
   }
   async updateContacts(){
