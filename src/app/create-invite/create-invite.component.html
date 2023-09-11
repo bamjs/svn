@@ -49,12 +49,18 @@
     </div>
   </form>
 </div>
-<div class="container">
-<label for="contactInput" class="col-form-label" *ngIf="isContactInput">Enter the City of Contacts</label>
+<div class="container" *ngIf="isContactInput">
+<label for="contactInput" class="col-form-label" >Enter the City of Contacts</label>
 <span class="row">
-<input type="text" id="contactInput" title="Contacts State" [(ngModel)]="contactCity" class="col btn btn-light" placeholder="Anantapur"  *ngIf="isContactInput"/>
+  <input type="text" id="contactInput" title="Contacts State" [ngbTypeahead]="placeSearch" [(ngModel)]="contactCity" class="col btn btn-light" placeholder="Anantapur" />
+</span>
+<span class="row">
+<button type="button" class="col btn btn-primary" (click)="updateContacts()" id="nextContacts" title="Next">Next</button>
 </span>
 </div>
+<ngb-toast header="I can be closed!" *ngIf="isContactsNotSupported" (hide)="isContactsNotSupported = false">
+  Selecting Contacts Supported only in Android
+</ngb-toast>
 <div *ngFor="let contact of contacts">
   {{contact |json}}
       </div>

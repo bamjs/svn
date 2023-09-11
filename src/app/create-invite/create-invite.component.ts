@@ -18,6 +18,7 @@ export class CreateInviteComponent implements AfterViewInit {
   inviteFormEvent= new EventEmitter();
   searching: boolean;
   isContactInput:boolean;
+  isContactsNotSupported:boolean = false;
   public contactCity : string;
   searchFailed: boolean;
   contacts:[]
@@ -39,14 +40,9 @@ export class CreateInviteComponent implements AfterViewInit {
     console.log(supported);
     if (supported) {
       this.isContactInput = true
-      const props = ['name', 'tel', 'address'];
-      const opts = {multiple: true};
-      try {
-        const contacts = await (navigator as any).contacts.select(props, opts);
-        this.handleResults(contacts);
-      } catch (ex) {
-        // Handle any errors here.
-      }
+    }else{
+      this.isContactsNotSupported = true
+
     }
   }
 
@@ -155,6 +151,16 @@ export class CreateInviteComponent implements AfterViewInit {
     contact.mobile = elem['tel'][0]
     contact.fname =elem['name']
   })
+this.inviteService.saveMany(this.contacts)
 
   }
+  async updateContacts(){
+    const props = ['name', 'tel', 'address'];
+    const opts = {multiple: true};
+    try {
+      const contacts = await (navigator as any).contacts.select(props, opts);
+      this.handleResults(contacts);
+    } catch (ex) {
+      // Handle any errors here.
+    }}
 }
