@@ -62,7 +62,7 @@ export class MongoDbService {
     const app = new Realm.App({id:'svn-invite-jndfu'})
     let token = await this.jwt.generateToken()
     const credentials = Realm.Credentials.jwt(token)
-    const user = app.logIn(credentials)
+    const user =await app.logIn(credentials)
     const mongo = app.currentUser.mongoClient(this.CLUSTER_NAME);
     const col = mongo.db(this.DATABASE_NAME).collection(this.COLLECTION_NAME);
     return col

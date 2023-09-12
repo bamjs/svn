@@ -170,7 +170,7 @@ export class DashboardComponent implements OnInit {
           {
             label: `Invitation Status [Total: ${preparedGroupedData.totalCount}]`,
             data: preparedGroupedData.data,
-            backgroundColor:['orange','blue'],
+            backgroundColor:preparedGroupedData.colors,
             borderWidth: 1,
             borderColor: preparedGroupedData.borderColors
           },
@@ -234,7 +234,7 @@ export class DashboardComponent implements OnInit {
     let borderColors = []
      let totalCount=0
     for (const element of groupedData) {
-      labels.push(element['_id'].toString().toUpperCase())
+      labels.push(element['_id']?element['_id'].toString().toUpperCase():"No City")
       data.push(element['invitationCount'])
       colors.push(this.generateRandomColor())
       borderColors.push(this.generateRandomColor())
@@ -242,29 +242,29 @@ export class DashboardComponent implements OnInit {
     }
     return { lables: labels, data: data, colors: colors, borderColors: borderColors,totalCount:totalCount }
   }
-  prepareDoughnutData(groupedData){
+  prepareDoughnutData(unOrderedData){
     let labels = []
     let data = []
     let colors = []
     let borderColors = []
     let totalCount=0
     // this.invitationsCompleted =
-    for (const element of groupedData) {
-      console.log(element['_id']);
+    for (const element of unOrderedData) {
       if (element['_id']) {
         this.invitationsCompleted = element['invitationCount']
       }
       // this.invitationsCompleted = element['_id']?element['invitationCount']:
-      labels.push(element['_id']?`Completed ${element['invitationCount']}`:`Not Completed ${element['invitationCount']}`)
+      if (element['_id']==null) {
+        labels.push("Status Unknown")
+        colors.push('grey')
+      }else{
+        labels.push(element['_id']?`Completed ${element['invitationCount']}`:`Not Completed ${element['invitationCount']}`)
+        colors.push(element['_id']?'green':'red')
+      }
       data.push(element['invitationCount'])
-      colors.push(element['_id']?'red':'green')
       borderColors.push(this.generateRandomColor())
       totalCount+=Number(element['invitationCount'])
-      console.log(totalCount);
-
     }
-    console.log(totalCount);
-
     return { lables: labels, data: data, colors: colors, borderColors: borderColors,totalCount:totalCount }
 
   }
@@ -293,7 +293,6 @@ export class DashboardComponent implements OnInit {
       }
     }
     let dt =[trueDataset,falseDataset]
-    console.log(dt);
     // return {"labels":,"dataset":dt};
   }
   getPercentage(){

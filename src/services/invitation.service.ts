@@ -92,7 +92,7 @@ export class InvitationService {
 }
 export interface Invitation {
   fname: string
-  mobile: number
+  mobile: string[]
   date: string
   completed: boolean
   place: string

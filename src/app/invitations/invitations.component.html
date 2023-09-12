@@ -1,6 +1,6 @@
 <div class="invitations">
   <div class="invitationForm " *ngIf="tempData.length==0">
-    <form [formGroup]="searchInvitationForm"  class="form border">
+    <form [formGroup]="searchInvitationForm" class="form border">
       <div class="row mb-3">
         <label for="fname" class="col-sm-2 col-form-label">Name</label>
         <div class="col-sm-10">
@@ -22,8 +22,8 @@
       <div>
         <div class="row justify-content-center">
           <div class="col">
-          <button type="submit" class="btn btn-primary" (click)="searchInvitation()">Search</button>
-        </div>
+            <button type="submit" class="btn btn-primary" (click)="searchInvitation()">Search</button>
+          </div>
         </div>
       </div>
     </form>
@@ -53,12 +53,13 @@
             <td>{{invitation.place}}</td>
             <td>
               <ng-template [ngIf]="isArray(invitation.mobile)" [ngIfElse]="singleContact">
-                <span *ngFor="let mob of getMobileArray(invitation.mobile)"></span>
-                <a #singleContact [href]="'tel:'+invitation.mobile">{{invitation.mobile}}</a>
-                <br>
+                <span *ngFor="let mob of invitation.mobile">
+                  <a #singleContact [href]="'tel:'+mob">{{mob}}</a>
+                  <br>
+                </span>
               </ng-template>
               <ng-template #singleContact>
-                <a  [href]="'tel:'+invitation.mobile">{{invitation.mobile}}</a>
+                <a [href]="'tel:'+invitation.mobile">{{invitation.mobile}}</a>
               </ng-template>
             </td>
             <td>{{invitation.count}}</td>

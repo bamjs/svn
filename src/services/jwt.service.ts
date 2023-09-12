@@ -16,7 +16,7 @@ async generateToken():Promise<string>{
     if (!this.uuidout) {
       this.uuidout = uuid.v4()
     }else{
-      console.log('already created');
+      // console.log('UUID already created');
 
     }
 
@@ -27,8 +27,6 @@ async generateToken():Promise<string>{
       .setSubject(this.uuidout)
       .setExpirationTime('24h')
       .sign(secret)
-
-    console.log(jwt)
   return jwt;
 }
 

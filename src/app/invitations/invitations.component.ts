@@ -139,6 +139,10 @@ export class InvitationsComponent implements OnInit {
     return Array.isArray(mobile)
   }
   getMobileArray(mobiles){
+    console.log(mobiles);
+    
+   return mobiles
+
     return [...mobiles]
   }
 }
