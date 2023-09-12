@@ -51,7 +51,16 @@
             <td>{{((page-1)*pageSize)+(i+1)}}</td>
             <td>{{invitation.fname}}</td>
             <td>{{invitation.place}}</td>
-            <td>{{invitation.mobile}}</td>
+            <td>
+              <ng-template [ngIf]="isArray(invitation.mobile)" [ngIfElse]="singleContact">
+                <span *ngFor="let mob of getMobileArray(invitation.mobile)"></span>
+                <a #singleContact [href]="'tel:'+invitation.mobile">{{invitation.mobile}}</a>
+                <br>
+              </ng-template>
+              <ng-template #singleContact>
+                <a  [href]="'tel:'+invitation.mobile">{{invitation.mobile}}</a>
+              </ng-template>
+            </td>
             <td>{{invitation.count}}</td>
             <td><input title="iscompleted" type="checkbox" disabled [checked]="invitation.completed"
                 textContent="Completed"></td>

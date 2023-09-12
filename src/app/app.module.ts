@@ -12,6 +12,7 @@ import { MarkCompletedComponent } from './mark-completed/mark-completed.componen
 import { SafePipe } from './safe.pipe';
 import { LoaderComponent } from './common/loader/loader.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ToastMessageComponent } from './common/toast-message/toast-message.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +22,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     SafePipe,
     LoaderComponent,
     DashboardComponent,
+    ToastMessageComponent,
   ],
   imports: [
     BrowserModule,

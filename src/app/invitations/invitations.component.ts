@@ -6,6 +6,8 @@ import { MarkCompletedComponent } from '../mark-completed/mark-completed.compone
 import { CommonService } from 'src/services/common.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, OperatorFunction,Subscription, catchError, debounceTime, distinctUntilChanged, from, map, of, pluck, switchMap, tap } from 'rxjs';
+import { ToastService } from 'src/services/toast.service';
+
 
 @Component({
   selector: 'app-invitations',
@@ -41,6 +43,7 @@ export class InvitationsComponent implements OnInit {
     private commonService: CommonService,
     private formBuilder:FormBuilder,
     private inviteService:InvitationService,
+    private toastService:ToastService,
     private router: Router) {
   }
 
@@ -58,6 +61,7 @@ export class InvitationsComponent implements OnInit {
     }
     this.invitationService.getCount().then(data => {
       this.collectionSize = data[0]["name"]
+      this.toastService.show(`Total Invitations ${this.collectionSize}`)
     });
   }
 
@@ -88,7 +92,13 @@ export class InvitationsComponent implements OnInit {
   bulkInsert() {
     console.log(this.tempData);
     this.commonService.loaderShow();
-    console.log(this.invitationService.saveMany(this.tempData))
+    this.invitationService.saveMany(this.tempData).then(data=>{
+      console.log(data);
+      this.toastService.show(`Successfully Imported ${this.tempData.length}`,{className:'bg-success text-light',delay:5000})
+    }).catch(err=>{
+      console.log(err);
+      this.toastService.show(`Unable to Import`,{className:'bg-danger'})
+    })
     this.commonService.loaderHide();
     this.router.navigate(['invitations'])
   }
@@ -96,6 +106,7 @@ export class InvitationsComponent implements OnInit {
     console.log(invitation['_id'].toString());
     invitation.completed = true
     this.invitationService.update(invitation)
+    this.toastService.show(`Marked as Completed`)
     // this.invitationService.f
   }
   openModal(invitation: any) {
@@ -104,6 +115,7 @@ export class InvitationsComponent implements OnInit {
     modalRef.result.then(invitation => {
       if(invitation){
         let data = this.invitationService.update(invitation)
+        this.toastService.show(`Marked as Completed`,{className:'bg-success text-light',delay:3000})
       }
     })
   }
@@ -122,5 +134,11 @@ export class InvitationsComponent implements OnInit {
     this.invitationService.multiSearch(this.searchInvitationForm.value).then(
      data=>this.invitations =data
     )
+  }
+  isArray(mobile){
+    return Array.isArray(mobile)
+  }
+  getMobileArray(mobiles){
+    return [...mobiles]
   }
 }

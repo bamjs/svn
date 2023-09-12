@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CommonService } from 'src/services/common.service';
 import { Invitation, InvitationService } from 'src/services/invitation.service';
 import * as XLSX from 'xlsx';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, OperatorFunction, catchError, debounceTime, distinctUntilChanged, from, map, of, pluck, switchMap, tap } from 'rxjs';
+import { ToastService } from 'src/services/toast.service';
 
 type AOA = any[][];
 @Component({
@@ -13,7 +12,7 @@ type AOA = any[][];
   templateUrl: './create-invite.component.html',
   styleUrls: ['./create-invite.component.css']
 })
-export class CreateInviteComponent implements AfterViewInit {
+export class CreateInviteComponent implements AfterViewInit,OnInit {
   @Output('inviteFormUpdate')
   inviteFormEvent= new EventEmitter();
   searching: boolean;
@@ -21,10 +20,23 @@ export class CreateInviteComponent implements AfterViewInit {
   isContactsNotSupported:boolean = false;
   public contactCity : string;
   searchFailed: boolean;
-  contacts:any[]
+  contacts:any[];
+  @Input()
+  inputInvitation: Invitation
+  @Input()
+  editMode: boolean
+  data: any[] = []
+  invitationForm: FormGroup = this.formBuilder.group({
+    fname: [''],
+    mobile: null,
+    count: 1,
+    date: new Date(),
+    completed: false,
+    place: ''
+  })
   constructor(private formBuilder: FormBuilder,
     private commonService: CommonService,
-    private ngbModalService: NgbModal,
+    private toastService: ToastService,
     private inviteService: InvitationService) {
       this.isContactInput = false;
   }
@@ -32,19 +44,7 @@ export class CreateInviteComponent implements AfterViewInit {
   fnameSearch:OperatorFunction<string, readonly string[]> =(text$:Observable<string>)=>this.search(text$,'fname')
   placeSearch:OperatorFunction<string, readonly string[]> =(text$:Observable<string>)=>this.search(text$,'place')
 
- async getContacts(){
 
-    let supported = ('contacts' in navigator && 'ContactsManager' in window);
-    console.log(supported);
-    supported = true;
-    console.log(supported);
-    if (supported) {
-      this.isContactInput = true
-    }else{
-      this.isContactsNotSupported = true
-
-    }
-  }
 
    search =(text$:Observable<string>,column)=> text$.pipe(
     debounceTime(200),
@@ -62,43 +62,32 @@ export class CreateInviteComponent implements AfterViewInit {
     ),
     tap(() => (this.searching = false)),
   );
-
+ngOnInit(): void {
+   this.checkForContactSupport()
+}
   ngAfterViewInit(): void {
-    // this.getContacts();
     if (this.editMode) {
       this.invitationForm.get("fname")?.disable()
       this.invitationForm.get("mobile")?.disable()
       this.invitationForm.get("date")?.disable()
       this.invitationForm.get("fname").setValue(this.inputInvitation.fname)
-      this.invitationForm.get("mobile").setValue(this.inputInvitation.mobile)
+      this.invitationForm.get("mobile").setValue(Array.isArray(this.inputInvitation.mobile?this.inputInvitation.mobile[0]:this.inputInvitation.mobile))
       this.invitationForm.get("date").setValue(this.inputInvitation.date)
       this.invitationForm.get("count").setValue(this.inputInvitation.count??1);
       this.invitationForm.get("completed").setValue(this.inputInvitation.completed)
       this.invitationForm.get("place").setValue(this.inputInvitation.place)
       // console.log(this.invitationForm.errors);
       this.invitationForm.valueChanges.subscribe(data=>{
-        console.log(data);
         this.inviteFormEvent.emit(this.invitationForm.value)
       })
     }
   }
-  @Input()
-  inputInvitation: Invitation
-  @Input()
-  editMode: boolean
-  data: any[] = []
-  invitationForm: FormGroup = this.formBuilder.group({
-    fname: [''],
-    mobile: null,
-    count: 1,
-    date: new Date(),
-    completed: false,
-    place: ''
-  })
+
   createInvitation() {
     this.commonService.loaderShow()
     this.inviteService.save(this.invitationForm.value).then(
       () => {
+        this.toastService.show(`New Guest Added`,{className:'bg-success text-light',delay:1500})
         this.invitationForm.reset()
       }
     ).finally(
@@ -148,13 +137,16 @@ export class CreateInviteComponent implements AfterViewInit {
       completed: false,
       place: ''
     }
+    let telephones =[]
+    elem['tel'].forEach(e=>telephones.push(e.replace(' ','')))
     contact.place = this.contactCity
-    contact.mobile = elem['tel'][0]
+    contact.mobile = telephones
     contact.fname =elem['name'][0]
     formattedContacts.push(contact)
   }  )
   this.contacts =formattedContacts;
 this.inviteService.saveMany(this.contacts)
+this.toastService.show(`Successfully imported ${this.contacts.length} contacts!`,{className:'bg-success text-light',delay:1500})
 this.isContactInput = false
 
   }
@@ -167,4 +159,20 @@ this.isContactInput = false
     } catch (ex) {
       // Handle any errors here.
     }}
+
+    async getContacts(){
+      let supported = ('contacts' in navigator && 'ContactsManager' in window);
+      if (supported) {
+        this.isContactInput = true
+      }else{
+        this.isContactsNotSupported = true
+        this.toastService.show("Importing Contacts Not Supported",{className:"bg-danger text-light",delay:1500})
+      }
+    }
+    checkForContactSupport(){
+      let supported = ('contacts' in navigator && 'ContactsManager' in window);
+      if (!supported){
+        this.isContactsNotSupported = true
+      }
+    }
 }

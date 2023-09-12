@@ -42,7 +42,7 @@
         title="bulk upload" (change)="readContentOfexcel($event)">
       <a href="../../assets/invites.xlsx" id="bulkUploadTemplate" class="float-end  col-mb-11 col-sm-5 btn  btn-secondary" outerText="Bulk upload"
         title="bulk upload" download="invite-template.xlsx">Download Template </a>
-        <button class="float-end col-mb-11 col-sm-5 btn  btn-secondary" type="button" (click)="getContacts()"> Open Contacts </button>
+        <button class="float-end col-mb-11 col-sm-5 btn  btn-secondary" *ngIf="!isContactsNotSupported" type="button" (click)="getContacts()"> Open Contacts </button>
       <div class="col-1"></div>
       <button type="submit" [disabled]="!invitationForm.valid" class="btn btn-primary col-mb-12 col-sm-6"
         *ngIf="!editMode" (click)="createInvitation()">Create</button>
@@ -55,12 +55,6 @@
   <input type="text" id="contactInput" title="Contacts State" [ngbTypeahead]="placeSearch" [(ngModel)]="contactCity" class="col btn btn-light" placeholder="Anantapur" />
 </span>
 <span class="row">
-<button type="button" class="col btn btn-primary" (click)="updateContacts()" id="nextContacts" title="Next">Next</button>
+<button type="button" class="col btn btn-primary" [disabled]="!contactCity" (click)="updateContacts()" id="nextContacts" title="Next">Next</button>
 </span>
 </div>
-<ngb-toast header="I can be closed!" *ngIf="isContactsNotSupported" (hide)="isContactsNotSupported = false">
-  Selecting Contacts Supported only in Android
-</ngb-toast>
-<div *ngFor="let contact of contacts">
-  {{contact |json}}
-      </div>
