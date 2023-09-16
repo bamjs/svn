@@ -296,7 +296,7 @@ export class DashboardComponent implements OnInit {
     // return {"labels":,"dataset":dt};
   }
   getPercentage(){
-    return Math.round(this.invitationsCompleted/this.totalInvitations*100);
+    return Math.round(this.invitationsCompleted??0/this.totalInvitations*100);
   }
 
 
