@@ -9,7 +9,7 @@ import { ToastService } from 'src/services/toast.service';
 })
 export class LoginComponent {
 username
-password
+password:string
 constructor(private toastService: ToastService,
   private commonService: CommonService,
   ){
@@ -17,7 +17,7 @@ constructor(private toastService: ToastService,
 }
 login(){
   if(this.username!=null && this.password!=null){
-    if (this.password=='muthyala') {
+    if (this.password.toLowerCase()=='muthyala') {
       this.commonService.authenticate(true,this.username)
     }
   }else if (this.password==null) {
