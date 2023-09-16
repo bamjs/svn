@@ -1,6 +1,7 @@
 <!-- <app-invite-complete></app-invite-complete> -->
 <!-- <div class="app" [ngStyle]="{'background-image': 'linear-gradient(rgba(141, 141, 237, 0.5), rgba(168, 212, 144, 0.5)),url(' + photo + ')'}"> -->
-<div class="app" >
+  <app-login *ngIf="!(isAuthenticated$|async)"  ></app-login>
+  <div #app *ngIf="isAuthenticated$|async" class="app" >
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">SVN EVENTS</a>
@@ -18,6 +19,8 @@
         </li>
       </ul>
     </div>
+    <div class="text-dark">Hi {{getUsername()}}!</div>
+    <button class="btn btn-light text-primary" (click)="logout()">Sign out</button>
   </div>
 </nav>
 <app-loader class="loader" *ngIf="loader$|async"></app-loader>

@@ -13,6 +13,7 @@ import { SafePipe } from './safe.pipe';
 import { LoaderComponent } from './common/loader/loader.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ToastMessageComponent } from './common/toast-message/toast-message.component';
+import { LoginComponent } from './common/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,6 +24,7 @@ import { ToastMessageComponent } from './common/toast-message/toast-message.comp
     LoaderComponent,
     DashboardComponent,
     ToastMessageComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
