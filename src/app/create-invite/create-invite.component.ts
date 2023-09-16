@@ -138,7 +138,7 @@ ngOnInit(): void {
       place: ''
     }
     let telephones =[]
-    elem['tel'].forEach(e=>telephones.push(e.replace(' ','')))
+    elem['tel'].forEach(e=>telephones.push(e.replace(/\s/g,'')))
     telephones =[...new Set(telephones)]
     contact.place = this.contactCity
     contact.mobile = telephones

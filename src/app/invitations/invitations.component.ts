@@ -7,7 +7,7 @@ import { CommonService } from 'src/services/common.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, OperatorFunction,Subscription, catchError, debounceTime, distinctUntilChanged, from, map, of, pluck, switchMap, tap } from 'rxjs';
 import { ToastService } from 'src/services/toast.service';
-
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-invitations',
@@ -140,9 +140,25 @@ export class InvitationsComponent implements OnInit {
   }
   getMobileArray(mobiles){
     console.log(mobiles);
-    
+
    return mobiles
 
     return [...mobiles]
+  }
+  exportData(){
+    this.inviteService.getAll(0,1000).then(
+      data=>{
+        let filteredData=[]
+        data.forEach(el=>{
+          delete el['_id']
+          filteredData.push(el)
+        })
+        this.commonService.loaderHide()
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(data)
+        XLSX.utils.book_append_sheet(wb,ws,"Invitations")
+        XLSX.writeFile(wb,"invitations.xlsx");
+      }
+    );
   }
 }
