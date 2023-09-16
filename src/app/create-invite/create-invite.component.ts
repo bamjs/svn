@@ -47,7 +47,7 @@ export class CreateInviteComponent implements AfterViewInit,OnInit {
 
 
    search =(text$:Observable<string>,column)=> text$.pipe(
-    debounceTime(200),
+    debounceTime(50),
     distinctUntilChanged(),
     tap(() => (this.searching = true)),
     switchMap((term) =>
@@ -138,7 +138,7 @@ ngOnInit(): void {
       place: ''
     }
     let telephones =[]
-    elem['tel'].forEach(e=>telephones.push(e.replace(/\s/g,'')))
+    elem['tel'].forEach(e=>telephones.push(e.replace(/\s/g,'').replace('-','')))
     telephones =[...new Set(telephones)]
     contact.place = this.contactCity
     contact.mobile = telephones

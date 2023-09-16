@@ -67,7 +67,7 @@ export class InvitationsComponent implements OnInit {
 
 
    search =(text$:Observable<string>,column)=> text$.pipe(
-    debounceTime(300),
+    debounceTime(50),
     // distinctUntilChanged(),
     tap(() => (this.searching = true)),
     switchMap((term) =>
