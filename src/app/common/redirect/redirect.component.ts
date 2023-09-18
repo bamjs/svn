@@ -9,23 +9,22 @@ import { MongoDbService } from 'src/services/mongo-db.service';
   styleUrls: ['./redirect.component.css']
 })
 export class RedirectComponent implements OnInit {
-constructor(private router:Router,private mongoService:MongoDbService,private http:HttpClient){
-
-}
+  constructor(private router: Router, private mongoService: MongoDbService, private http: HttpClient) {
+  }
   async ngOnInit() {
     try {
       const collection = await this.mongoService.getCollection("qrStats")
-      this.http.get("https://api.ipify.org/?format=json").subscribe(async (data:any)=>{
-       await collection.insertOne({
+      this.http.get("https://api.ipify.org/?format=json").subscribe(async (data: any) => {
+        const inserted = await collection.insertOne({
           timeStamp: Date.now(),
-          ip:data.ip
+          ip: data.ip
         })
+        console.log(inserted);
       })
-
     } catch (error) {
-      console.error("unable ",error);
-    }finally{
-      window.location.href="https://maps.app.goo.gl/sefSudawbPJ9cFL78"
+      console.error("unable ", error);
+    } finally {
+      window.location.href = "https://maps.app.goo.gl/sefSudawbPJ9cFL78"
     }
   }
 }
