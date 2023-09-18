@@ -161,4 +161,16 @@ export class InvitationsComponent implements OnInit {
       }
     );
   }
+  prepareWTNumber(number){
+    let numberStr
+    if (Array.isArray) {
+numberStr = String(number[0])
+    }else{
+      numberStr  =String(number)
+    }
+    return numberStr.replace(/^\+91/,'')
+  }
+  prepareWTMsg(){
+    return encodeURI("Join us in celebrating wedding of Nelima and Srikanth! Save the dates, October 19th&20th, for their joyous wedding festivities. Your presence will make it even more special! 💍🎉")
+  }
 }
