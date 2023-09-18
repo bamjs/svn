@@ -9,7 +9,7 @@ import { CommonService } from './common.service';
   providedIn: 'root'
 })
 export class InvitationService {
-  private collectionName: string = 'invitation'
+  private collectionName: string = 'invite'
   constructor(
     private mongoDb: MongoDbService,
     private commonService: CommonService
