@@ -14,6 +14,7 @@ import { LoaderComponent } from './common/loader/loader.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ToastMessageComponent } from './common/toast-message/toast-message.component';
 import { LoginComponent } from './common/login/login.component';
+import { RedirectComponent } from './common/redirect/redirect.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +26,7 @@ import { LoginComponent } from './common/login/login.component';
     DashboardComponent,
     ToastMessageComponent,
     LoginComponent,
+    RedirectComponent,
   ],
   imports: [
     BrowserModule,

@@ -67,6 +67,7 @@
             <td><input title="iscompleted" type="checkbox" disabled [checked]="invitation.completed"
                 textContent="Completed"></td>
             <td><button type="button" (click)="openModal(invitation)" class="btn btn-primary">Mark As Completed</button>
+              <a class="btn btn-primary mt-1" [href]="'https://wa.me/'+prepareWTNumber(invitation.mobile)+'?text='+prepareWTMsg()">Send Whatsapp Message</a>
             </td>
           </tr>
         </tbody>

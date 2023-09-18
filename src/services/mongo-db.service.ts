@@ -64,7 +64,7 @@ export class MongoDbService {
     const credentials = Realm.Credentials.jwt(token)
     const user =await app.logIn(credentials)
     const mongo = app.currentUser.mongoClient(this.CLUSTER_NAME);
-    const col = mongo.db(this.DATABASE_NAME).collection(this.COLLECTION_NAME);
+    const col = mongo.db(this.DATABASE_NAME).collection(collection??this.COLLECTION_NAME);
     return col
   }
 

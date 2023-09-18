@@ -4,8 +4,14 @@ import { CreateInviteComponent } from './create-invite/create-invite.component';
 import { InvitationsComponent } from './invitations/invitations.component';
 import { invitationResolver } from 'src/services/invitation.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { RedirectComponent } from './common/redirect/redirect.component';
 
 const routes: Routes = [
+  {
+    path: "qr",
+    component: RedirectComponent,
+    pathMatch: 'full'
+  },
   {
     path: "inivation/create",
     component: CreateInviteComponent,
@@ -18,15 +24,15 @@ const routes: Routes = [
     resolve: {
       invitations: invitationResolver
     }
-  },{
-    path:"",
-    component:DashboardComponent
+  }, {
+    path: "",
+    component: DashboardComponent
   }
 
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{useHash:true})],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

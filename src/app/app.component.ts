@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonService } from 'src/services/common.service';
 import { MongoDbService } from 'src/services/mongo-db.service';
 
@@ -7,7 +8,7 @@ import { MongoDbService } from 'src/services/mongo-db.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent  implements OnInit{
   title = 'Srikanth Weds Neelima';
   photo
   // photo = '../assets/single.jpg'
@@ -15,9 +16,11 @@ export class AppComponent {
   loader$
   isAuthenticated$
   index = 0
+  isQr:boolean = false
   constructor(
     private mongoDb:MongoDbService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private router:Router
     ){
       this.loader$ = this.commonService.loader
       this.isAuthenticated$ = this.commonService.isAuthenticated;
@@ -30,11 +33,26 @@ export class AppComponent {
 
       // },2000)
   }
+  ngOnInit(): void {
+    this.isQrcheck()
+  }
+
   getUsername(){
    return this.commonService.getUsername()
   }
   logout(){
     this.commonService.logout()
+  }
+  isQrcheck(){
+    if(window.location.href.includes("qr")){
+      console.log("true,QR");
+      this.isQr = true
+    //  return true
+    }else{
+      console.log("false,QR");
+
+      // return false
+    }
   }
 
 }

@@ -1,7 +1,7 @@
 <!-- <app-invite-complete></app-invite-complete> -->
 <!-- <div class="app" [ngStyle]="{'background-image': 'linear-gradient(rgba(141, 141, 237, 0.5), rgba(168, 212, 144, 0.5)),url(' + photo + ')'}"> -->
   <app-login *ngIf="!(isAuthenticated$|async)"  ></app-login>
-  <div #app *ngIf="isAuthenticated$|async" class="app" >
+  <div #app *ngIf="((isAuthenticated$|async) && !isQr)" class="app" >
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">SVN EVENTS</a>
@@ -24,6 +24,6 @@
   </div>
 </nav>
 <app-loader class="loader" *ngIf="loader$|async"></app-loader>
-<router-outlet></router-outlet>
-<app-toast-message aria-live="polite" aria-atomic="true"></app-toast-message>
 </div>
+<app-toast-message aria-live="polite" aria-atomic="true"></app-toast-message>
+<router-outlet></router-outlet>

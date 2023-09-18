@@ -13,6 +13,7 @@ export class CommonService {
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.checkLocalStorage());
 
   checkLocalStorage(): boolean {
+    if(window.location.href.includes("qr")){return true}
     if (localStorage.getItem("authenticated")) {
       return true;
     }
