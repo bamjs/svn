@@ -47,6 +47,7 @@
       <button type="submit" [disabled]="!invitationForm.valid" class="btn btn-primary col-mb-12 col-sm-6"
         *ngIf="!editMode" (click)="createInvitation()">Create</button>
     </div>
+    <button class="btn btn-primary" (click)="update()">Update</button>
   </form>
 </div>
 <div class="container" *ngIf="isContactInput">

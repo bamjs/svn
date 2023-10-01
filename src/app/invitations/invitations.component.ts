@@ -5,9 +5,10 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MarkCompletedComponent } from '../mark-completed/mark-completed.component';
 import { CommonService } from 'src/services/common.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable, OperatorFunction,Subscription, catchError, debounceTime, distinctUntilChanged, from, map, of, pluck, switchMap, tap } from 'rxjs';
+import { Observable, OperatorFunction, Subscription, catchError, debounceTime, from,  of, switchMap, tap } from 'rxjs';
 import { ToastService } from 'src/services/toast.service';
 import * as XLSX from 'xlsx';
+import { CreateInviteComponent } from '../create-invite/create-invite.component';
 
 @Component({
   selector: 'app-invitations',
@@ -26,9 +27,10 @@ export class InvitationsComponent implements OnInit {
   navigationSubscription: Subscription;
   searching: boolean;
   searchFailed: boolean;
-  mobileSearch:OperatorFunction<string, readonly string[]> =(text$:Observable<string>)=>this.search(text$,'mobile')
-  fnameSearch:OperatorFunction<string, readonly string[]> =(text$:Observable<string>)=>this.search(text$,'fname')
-  placeSearch:OperatorFunction<string, readonly string[]> =(text$:Observable<string>)=>this.search(text$,'place')
+  invitationSearch:boolean = false;
+  mobileSearch: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => this.search(text$, 'mobile')
+  fnameSearch: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => this.search(text$, 'fname')
+  placeSearch: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => this.search(text$, 'place')
   searchInvitationForm: FormGroup = this.formBuilder.group({
     fname: [''],
     mobile: null,
@@ -41,9 +43,9 @@ export class InvitationsComponent implements OnInit {
     private route: ActivatedRoute,
     private ngbModalService: NgbModal,
     private commonService: CommonService,
-    private formBuilder:FormBuilder,
-    private inviteService:InvitationService,
-    private toastService:ToastService,
+    private formBuilder: FormBuilder,
+    private inviteService: InvitationService,
+    private toastService: ToastService,
     private router: Router) {
   }
 
@@ -66,13 +68,13 @@ export class InvitationsComponent implements OnInit {
   }
 
 
-   search =(text$:Observable<string>,column)=> text$.pipe(
+  search = (text$: Observable<string>, column) => text$.pipe(
     debounceTime(50),
     // distinctUntilChanged(),
     tap(() => (this.searching = true)),
     switchMap((term) =>
-      from(this.inviteService.search(column,term)).pipe(
-        tap((data)=>console.log(data)),
+      from(this.inviteService.search(column, term)).pipe(
+        tap((data) => console.log(data)),
         tap(() => (this.searchFailed = false)),
         catchError(() => {
           this.searchFailed = true;
@@ -92,12 +94,12 @@ export class InvitationsComponent implements OnInit {
   bulkInsert() {
     console.log(this.tempData);
     this.commonService.loaderShow();
-    this.invitationService.saveMany(this.tempData).then(data=>{
+    this.invitationService.saveMany(this.tempData).then(data => {
       console.log(data);
-      this.toastService.show(`Successfully Imported ${this.tempData.length}`,{className:'bg-success text-light',delay:5000})
-    }).catch(err=>{
+      this.toastService.show(`Successfully Imported ${this.tempData.length}`, { className: 'bg-success text-light', delay: 5000 })
+    }).catch(err => {
       console.log(err);
-      this.toastService.show(`Unable to Import`,{className:'bg-danger'})
+      this.toastService.show(`Unable to Import`, { className: 'bg-danger' })
     })
     this.commonService.loaderHide();
     this.router.navigate(['invitations'])
@@ -113,9 +115,9 @@ export class InvitationsComponent implements OnInit {
     const modalRef: NgbModalRef = this.ngbModalService.open(MarkCompletedComponent, { size: 'lg', backdrop: 'static' })
     modalRef.componentInstance.invitation = invitation
     modalRef.result.then(invitation => {
-      if(invitation){
+      if (invitation) {
         let data = this.invitationService.update(invitation)
-        this.toastService.show(`Marked as Completed`,{className:'bg-success text-light',delay:3000})
+        this.toastService.show(`Marked as Completed`, { className: 'bg-success text-light', delay: 3000 })
       }
     })
   }
@@ -130,47 +132,62 @@ export class InvitationsComponent implements OnInit {
       this.invitations = data
     })
   }
-  searchInvitation(){
+  searchInvitation() {
     this.invitationService.multiSearch(this.searchInvitationForm.value).then(
-     data=>this.invitations =data
+      data => {this.invitations = data
+      this.invitationSearch = true
+      console.log(this.invitationSearch);
+
+    }
     )
   }
-  isArray(mobile){
+  isArray(mobile) {
     return Array.isArray(mobile)
   }
-  getMobileArray(mobiles){
+  getMobileArray(mobiles) {
     console.log(mobiles);
 
-   return mobiles
+    return mobiles
 
     return [...mobiles]
   }
-  exportData(){
-    this.inviteService.getAll(0,1000).then(
-      data=>{
-        let filteredData=[]
-        data.forEach(el=>{
+  exportData() {
+    this.inviteService.getAll(0, 1000).then(
+      data => {
+        let filteredData = []
+        data.forEach(el => {
           delete el['_id']
           filteredData.push(el)
         })
         this.commonService.loaderHide()
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.json_to_sheet(data)
-        XLSX.utils.book_append_sheet(wb,ws,"Invitations")
-        XLSX.writeFile(wb,"invitations.xlsx");
+        XLSX.utils.book_append_sheet(wb, ws, "Invitations")
+        XLSX.writeFile(wb, "invitations.xlsx");
       }
     );
   }
-  prepareWTNumber(number){
+  edit(invitation) {
+    const modalRef: NgbModalRef = this.ngbModalService.open(CreateInviteComponent)
+    console.log(invitation);
+
+    modalRef.componentInstance.inputInvitation = invitation
+    modalRef.componentInstance.editMode = true
+    modalRef.componentInstance.modalRef = modalRef
+    modalRef.result.then(data => {
+      console.log(data);
+    })
+  }
+  prepareWTNumber(number) {
     let numberStr
     if (Array.isArray) {
-numberStr = String(number[0])
-    }else{
-      numberStr  =String(number)
+      numberStr = String(number[0])
+    } else {
+      numberStr = String(number)
     }
-    return numberStr.replace(/^\+91/,'')
+    return numberStr.replace(/^\+91/, '')
   }
-  prepareWTMsg(){
-    return encodeURI("Join us in celebrating wedding of Nelima and Srikanth! Save the dates, October 19th&20th, for their joyous wedding festivities. Your presence will make it even more special! 💍🎉")
+  prepareWTMsg() {
+    return encodeURI("Join us in celebrating wedding of Nelima and Srikanth! October 19th&20th. Your presence will make it even more special! 💍🎉")
   }
 }

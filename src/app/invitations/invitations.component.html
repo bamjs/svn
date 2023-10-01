@@ -66,16 +66,18 @@
             <td>{{invitation.count}}</td>
             <td><input title="iscompleted" type="checkbox" disabled [checked]="invitation.completed"
                 textContent="Completed"></td>
-            <td><button type="button" (click)="openModal(invitation)" class="btn btn-primary">Mark As Completed</button>
+            <td>
+              <button title="edit" class="btn btn-secondary m-2" (click)="edit(invitation)"><i class="bi bi-pen-fill"></i></button>
+              <button type="button" (click)="openModal(invitation)" class="btn btn-primary">Mark As Completed</button>
               <a class="btn btn-primary mt-1" [href]="'https://wa.me/'+prepareWTNumber(invitation.mobile)+'?text='+prepareWTMsg()">Send Whatsapp Message</a>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="row justify-content-center">
-      <ngb-pagination [(page)]="page" class="col-6" (pageChange)="updateRecords()" *ngIf="tempData.length<=0"
-        [collectionSize]="collectionSize" [ellipses]="true" [pageSize]="pageSize">
+    <div class="row justify-content-center" *ngIf="!invitationSearch">
+      <ngb-pagination [(page)]="page" class="col-6" (pageChange)="updateRecords()" *ngIf="(tempData.length<=0 )"
+        [collectionSize]="collectionSize" [maxSize]="6"  [ellipses]="true" [pageSize]="pageSize">
       </ngb-pagination>
       <button *ngIf="tempData==null||tempData.length>0" class="btn btn-primary float-end col-3"
         (click)="bulkInsert()">Upload</button>

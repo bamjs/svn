@@ -35,7 +35,7 @@ export class InvitationService {
   async search(column: string, keyword: string) {
     let col = await this.mongoDb.getCollection(this.collectionName);
     let data = (await col.find({ [column]: { $regex: keyword, $options: 'i' } }, { limit: 10, projection: { [column]: 1 } })).map(data => data[column])
-    return data
+    return [...new Set(data)]
   }
   async multiSearch(columnValues) {
     console.log(columnValues);
@@ -48,7 +48,7 @@ export class InvitationService {
       }
     }
     console.log(searchObject);
-    let data = await col.find(searchObject, { limit: 10 })
+    let data = await col.find(searchObject)
     console.log(data);
 
     return data
@@ -57,6 +57,11 @@ export class InvitationService {
   async update(document: {}) {
     let col = await this.mongoDb.getCollection(this.collectionName)
     let data = col.updateOne({ _id: new BSON.ObjectID(document["_id"]) }, document)
+    return data
+  }
+  async updateWithId(id,document:{}){
+    let col = await this.mongoDb.getCollection(this.collectionName)
+    let data = col.updateOne({ _id: new BSON.ObjectID(id) }, document)
     return data
   }
   async saveMany(document: {}[]) {
