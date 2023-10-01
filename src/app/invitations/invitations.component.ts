@@ -211,14 +211,21 @@ export class InvitationsComponent implements OnInit {
      console.log(sortedInvitation);
 
      let previousInvitationPlace
+     let count = 0
      for (let i = 0; i < sortedInvitation.length; i++) {
-      const invitation = sortedInvitation[i];
-      if (i==0|| previousInvitationPlace !=invitation.place) {
-        previousInvitationPlace = invitation.place
-        text+=`\n${'_'.padStart(90,'_')}\n\n`
-        text+= `      *****      ${invitation.place}      *****      \n`
+       const invitation = sortedInvitation[i];
+       if (i==0|| previousInvitationPlace !=invitation.place) {
+        if (i!=0) {
+          text+=`                Total Count   ${count}  \n`
+        }
+         previousInvitationPlace = invitation.place
+         text+=`\n${'_'.padStart(90,'_')}\n\n`
+         text+= `      *****      ${invitation.place}      *****      \n`
+         count=0
+
       }
       text+=`  ${invitation.fname?.padStart(50)}    >>    ${invitation.mobile}  \n`
+      count+=1
      }
      console.log(text);
      this.saveFile(this.invitationSearch ? previousInvitationPlace+".txt":"invitations.txt",text)
