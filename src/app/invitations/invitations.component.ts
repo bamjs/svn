@@ -5,7 +5,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MarkCompletedComponent } from '../mark-completed/mark-completed.component';
 import { CommonService } from 'src/services/common.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable, OperatorFunction, Subscription, catchError, debounceTime, from,  of, switchMap, tap } from 'rxjs';
+import { Observable, OperatorFunction, Subscription, catchError, debounceTime, from,  groupBy,  of, switchMap, tap } from 'rxjs';
 import { ToastService } from 'src/services/toast.service';
 import * as XLSX from 'xlsx';
 import { CreateInviteComponent } from '../create-invite/create-invite.component';
@@ -190,4 +190,52 @@ export class InvitationsComponent implements OnInit {
   prepareWTMsg() {
     return encodeURI("Join us in celebrating wedding of Nelima and Srikanth! October 19th&20th. Your presence will make it even more special! 💍🎉")
   }
+  async exportText(){
+    let text = ""
+    let sortedInvitation =[]
+    if (this.invitationSearch) {
+      sortedInvitation =  this.invitations.sort((a,b)=>{
+        return a.place.localeCompare(b.place)
+       })
+       console.log(sortedInvitation);
+     }else{
+      sortedInvitation  = await this.inviteService.getAll(0,-1)
+      sortedInvitation = sortedInvitation.sort((a,b)=>{
+          if (a.place) {
+            return a.place.localeCompare(b.place)
+          }else{
+            return 0
+          }
+        })
+      }
+     console.log(sortedInvitation);
+
+     let previousInvitationPlace
+     for (let i = 0; i < sortedInvitation.length; i++) {
+      const invitation = sortedInvitation[i];
+      if (i==0|| previousInvitationPlace !=invitation.place) {
+        previousInvitationPlace = invitation.place
+        text+=`\n${'_'.padStart(90,'_')}\n\n`
+        text+= `      *****      ${invitation.place}      *****      \n`
+      }
+      text+=`  ${invitation.fname?.padStart(50)}    >>    ${invitation.mobile}  \n`
+     }
+     console.log(text);
+     this.saveFile(this.invitationSearch ? previousInvitationPlace+".txt":"invitations.txt",text)
+    // fs.writeFileSync(this.invitationSearch ? previousInvitationPlace+".txt":"invitations.txt",text)
+    }
+    saveFile(filename,text){
+      let file = new Blob([text], {type: '.txt'});
+    let a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }, 0);
+    }
+
 }

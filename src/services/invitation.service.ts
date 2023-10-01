@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { MongoDbService } from './mongo-db.service';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { from } from 'rxjs';
+import { find, from } from 'rxjs';
 import { BSON } from 'realm-web';
 import { CommonService } from './common.service';
 
@@ -24,7 +24,12 @@ export class InvitationService {
   async getAll(skip: number, limit: number): Promise<Invitation[]> {
     // console.log("calling the service ");
     this.commonService.loaderShow()
-    let data = await this.mongoDb.findAll(this.collectionName, [{ "$skip": skip }, { "$limit": limit }])
+    let data
+    if (limit!=-1) {
+      data = await this.mongoDb.findAll(this.collectionName, [{ "$skip": skip }, { "$limit": limit }])
+    }else{
+      data = await this.mongoDb.findAll(this.collectionName,[])
+    }
     this.commonService.loaderHide()
     // console.log("data", data);
     return data;
