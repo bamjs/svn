@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { CommonService } from 'src/services/common.service';
 import { ToastService } from 'src/services/toast.service';
 
@@ -13,7 +14,8 @@ username
 password:string
 constructor(private toastService: ToastService,
   private commonService: CommonService,
-  private httpClient : HttpClient
+  private httpClient : HttpClient,
+  private router:Router
   ){
 
 }
@@ -21,6 +23,7 @@ login(){
   if(this.username!=null && this.password!=null){
     if (this.password.toLowerCase()=='muthyala') {
       this.commonService.authenticate(true,this.username)
+      this.router.navigateByUrl("dashboard")
     }
   }else if (this.password==null) {
     this.toastService.show("Please enter password",{"className":"danger"})

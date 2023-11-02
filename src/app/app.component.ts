@@ -44,6 +44,10 @@ export class AppComponent  implements OnInit{
     this.commonService.logout()
   }
   isQrcheck(){
+    if (window.location.href.includes("oauth2")) {
+      this.isQr= true
+      console.log("oauth2",true);
+    }
     if(window.location.href.includes("qr")){
       console.log("true,QR");
       this.isQr = true
