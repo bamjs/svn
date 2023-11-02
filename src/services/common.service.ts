@@ -7,11 +7,10 @@ import { BehaviorSubject } from 'rxjs';
 export class CommonService {
   logout() {
     localStorage.clear()
-    this.isAuthenticated.next(false)
+    this.isAuthenticated.next(this.checkLocalStorage())
   }
   loader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.checkLocalStorage());
-
   checkLocalStorage(): boolean {
     if(window.location.href.includes("qr")){return true}
     if (localStorage.getItem("authenticated")) {
@@ -30,6 +29,10 @@ export class CommonService {
     localStorage.setItem("username",username)
     localStorage.setItem("authenticated", "true")
     this.isAuthenticated.next(true);
+    this.isAuthenticated.subscribe(data=>{
+      console.log("authenticated",data);
+      
+    })
   }
   constructor() { }
   loaderShow() {

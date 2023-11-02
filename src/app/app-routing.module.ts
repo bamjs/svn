@@ -5,12 +5,18 @@ import { InvitationsComponent } from './invitations/invitations.component';
 import { invitationResolver } from 'src/services/invitation.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RedirectComponent } from './common/redirect/redirect.component';
+import { Oauth2Component } from './common/oauth2/oauth2.component';
 
 const routes: Routes = [
   {
     path: "qr",
     component: RedirectComponent,
     pathMatch: 'full'
+  },
+  {
+    path:"oauth2",
+    component:Oauth2Component,
+    pathMatch:'full'
   },
   {
     path: "inivation/create",

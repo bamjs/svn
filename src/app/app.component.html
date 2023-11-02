@@ -26,4 +26,4 @@
 <app-loader class="loader" *ngIf="loader$|async"></app-loader>
 </div>
 <app-toast-message aria-live="polite" aria-atomic="true"></app-toast-message>
-<router-outlet></router-outlet>
+<router-outlet *ngIf="((isAuthenticated$|async) && !isQr)"></router-outlet>

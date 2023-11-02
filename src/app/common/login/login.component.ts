@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { CommonService } from 'src/services/common.service';
 import { ToastService } from 'src/services/toast.service';
@@ -12,6 +13,7 @@ username
 password:string
 constructor(private toastService: ToastService,
   private commonService: CommonService,
+  private httpClient : HttpClient
   ){
 
 }
@@ -25,5 +27,12 @@ login(){
 
   }{}
 }
+githubLogin(){
+this.httpClient.post("https://github.com/login/oauth/authorize?client_id=f85c48ec6a7800894aa8&redirect_uri=https://jeethowithjeevan.co.in/#/oauth2","",{headers:{"Accept": "application/json"}}).subscribe(auth_code=>{
+  console.log(auth_code);
+  alert(JSON.stringify(auth_code))
+  this.httpClient.post("https://github.com/login/oauth/access_token","")
 
+})
+}
 }
